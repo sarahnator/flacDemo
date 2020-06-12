@@ -69,15 +69,16 @@ void MainComponent::releaseResources()
 //==============================================================================
 void MainComponent::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll(Colours::lightcoral);
+ 
+    g.fillAll(Colours::lightslategrey);
+    g.setColour(Colours::white);
+    g.fillRect(getWidth()/2 - 100, getHeight()/2 - 30, 200, 65);
     g.setColour(Colours::black);
-
+    g.drawRect(getWidth()/2 - 100, getHeight()/2 - 30, 200, 65, 2);
     g.setFont(40.0f);
     g.drawText ("Flac demo", getLocalBounds(), Justification::centred, true);
-    g.drawRect(getWidth()/2 - 100, getHeight()/2 - 30, 200, 65, 2);
 
-    // You can add your drawing code here!
+
 }
 
 void MainComponent::resized()
