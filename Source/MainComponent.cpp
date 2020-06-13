@@ -36,7 +36,7 @@ MainComponent::MainComponent() : state(Stopped)
     addAndMakeVisible (&flacButton);
     flacButton.setButtonText ("Convert to Flac format and play");
     flacButton.onClick = [this] { flacButtonClicked(); };
-    flacButton.setColour (TextButton::buttonColourId, Colours::mediumpurple);
+    flacButton.setColour (TextButton::buttonColourId, Colours::lightblue);
     flacButton.setEnabled (false);
 
     
@@ -191,27 +191,44 @@ void MainComponent::openButtonClicked()
         auto file = chooser.getResult();
         auto* reader = formatManager.createReaderFor (file);
         
-        /*
-         
-         I HOPE THIS WORKS
-         
-         
-         */
-        FileInputStream* fis = new FileInputStream(file);
-        AudioFormatReader* flacReader = flac.createReaderFor(fis, false);
-        
-        /*
-        delete
-         */
-        std::cout << flacReader << std::endl;
-        /* end of delete*/
         
         
         if (reader != nullptr)
         {
+            
+            //create new audio buffer to transform wav to flac format
+              AudioSampleBuffer *buff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
+              reader->read(buff, 0, (int)reader->lengthInSamples, 0, true, true);
+            delete buff;
+
+              
+//              //create memory buffer for output stream
+//              AudioSampleBuffer *destBuff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
+//              MemoryOutputStream *mem = new MemoryOutputStream(destBuff, (int)reader->lengthInSamples);
+//             
+//              //what bits per sample to use?
+//              AudioFormatWriter* flacWriter = flacFormat.createWriterFor(mem, reader->sampleRate, reader->numChannels, reader->bitsPerSample, reader->metadataValues, 0);
+//            
+//              flacWriter->writeFromAudioSampleBuffer(*buff, 0, buff->getNumSamples());
+
+
+              
+//              FileInputStream* fis = new FileInputStream(file);
+//              AudioFormatReader* flacReader = flacFormat.createReaderFor(fis, false);
+//
+//              /*
+//              delete
+//               */
+//              std::cout << flacReader << std::endl;
+//              /* end of delete*/
+              
+            
+            
+            
             std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
             transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
             playButton.setEnabled (true);
+            flacButton.setEnabled (true);
             readerSource.reset (newSource.release());
         }
     }

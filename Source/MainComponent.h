@@ -59,7 +59,7 @@ private:
     TextButton flacButton;
 
     AudioFormatManager formatManager;
-    FlacAudioFormat flac;
+    FlacAudioFormat flacFormat;
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     AudioTransportSource transportSource;
     TransportState state;

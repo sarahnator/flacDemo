@@ -105,6 +105,10 @@
 			isa = PBXBuildFile;
 			fileRef = 4D6E83BC93FB37F0A7638C57;
 		};
+		F594CD796891AB1172779331 = {
+			isa = PBXBuildFile;
+			fileRef = A3BAD3822575E7D2A4B75842;
+		};
 		AAA51CAF42DA09E3AD70CAB0 = {
 			isa = PBXBuildFile;
 			fileRef = E098A9B950E92B02E7FD2E0B;
@@ -349,6 +353,13 @@
 			path = ../../JuceLibraryCode/BinaryData.cpp;
 			sourceTree = "SOURCE_ROOT";
 		};
+		A3BAD3822575E7D2A4B75842 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			name = "include_juce_dsp.mm";
+			path = "../../JuceLibraryCode/include_juce_dsp.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
 		A94A63DE7908F1819CDDA8D2 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
@@ -425,6 +436,13 @@
 			name = "include_juce_opengl.mm";
 			path = "../../JuceLibraryCode/include_juce_opengl.mm";
 			sourceTree = "SOURCE_ROOT";
+		};
+		DC486D5FC8437EEE822592D9 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_dsp";
+			path = "/Users/cookiemonster/Documents/JUCE/modules/juce_dsp";
+			sourceTree = "<absolute>";
 		};
 		E098A9B950E92B02E7FD2E0B = {
 			isa = PBXFileReference;
@@ -506,6 +524,7 @@
 				657B2E9AEDA9A63D7A62E90F,
 				47296CD2FA146F932E1426CA,
 				F4B61BE08A1DB200B7AB1F36,
+				DC486D5FC8437EEE822592D9,
 				4A029C49ABE4625AEEFFFE6B,
 				19A5922B2C813FD4BE6E8B84,
 				B0E0F56599F8C4ED8B0B2569,
@@ -529,6 +548,7 @@
 				82087DDEB5C697F08FA9A2E9,
 				26823F7153D8B6419FB8A93E,
 				4D6E83BC93FB37F0A7638C57,
+				A3BAD3822575E7D2A4B75842,
 				E098A9B950E92B02E7FD2E0B,
 				8628F8EA121B77448D0D303A,
 				15A9C73CAC111B6EE7E3873F,
@@ -817,6 +837,7 @@
 				E7CE656A8A41FB42C69C7A54,
 				48FE1153976EE082A36657FE,
 				8E6C26CA3D8C1E2E165F7B18,
+				F594CD796891AB1172779331,
 				AAA51CAF42DA09E3AD70CAB0,
 				F2F17E85C30A4BBCA2235A06,
 				161E6B6DA2A3B9DA4F8E34D0,
