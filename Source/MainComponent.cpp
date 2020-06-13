@@ -11,7 +11,7 @@
 #include <fstream>
 
 //==============================================================================
-MainComponent::MainComponent() : state(Stopped)
+MainComponent::MainComponent() : state(Stopped), convertToFlac(true)
 {
     // Make sure you set the size of the component after
     // you add any child components.
@@ -34,7 +34,7 @@ MainComponent::MainComponent() : state(Stopped)
     stopButton.setEnabled (false);
     
     addAndMakeVisible (&flacButton);
-    flacButton.setButtonText ("Convert to Flac format and play");
+    flacButton.setButtonText ("Convert to Flac");
     flacButton.onClick = [this] { flacButtonClicked(); };
     flacButton.setColour (TextButton::buttonColourId, Colours::lightblue);
     flacButton.setEnabled (false);
@@ -95,7 +95,7 @@ void MainComponent::getNextAudioBlock (const AudioSourceChannelInfo& bufferToFil
 
 void MainComponent::releaseResources()
 {
-    // This will be called when the audio device stops, or when it is being
+        // This will be called when the audio device stops, or when it is being
     // restarted due to a setting change.
 
     // For more details, see the help for AudioProcessor::releaseResources()
@@ -196,33 +196,26 @@ void MainComponent::openButtonClicked()
         if (reader != nullptr)
         {
             
-            //create new audio buffer to transform wav to flac format
+//            create new audio buffer to transform wav to flac format
               AudioSampleBuffer *buff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
               reader->read(buff, 0, (int)reader->lengthInSamples, 0, true, true);
+
+              
+              //create memory buffer for output stream
+              AudioSampleBuffer *destBuff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
+              MemoryOutputStream *mem = new MemoryOutputStream(destBuff, (int)reader->lengthInSamples);
+             
+//              //what bits per sample to use?
+              AudioFormatWriter* flacWriter = flacFormat.createWriterFor(mem, reader->sampleRate, reader->numChannels, reader->bitsPerSample, reader->metadataValues, 0);
+            
+            //TODO: figure out why audioFormatWriter is null
+//              flacWriter->writeFromAudioSampleBuffer(*buff, 0, buff->getNumSamples());
+            delete mem;
+            delete destBuff;
             delete buff;
 
               
-//              //create memory buffer for output stream
-//              AudioSampleBuffer *destBuff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
-//              MemoryOutputStream *mem = new MemoryOutputStream(destBuff, (int)reader->lengthInSamples);
-//             
-//              //what bits per sample to use?
-//              AudioFormatWriter* flacWriter = flacFormat.createWriterFor(mem, reader->sampleRate, reader->numChannels, reader->bitsPerSample, reader->metadataValues, 0);
-//            
-//              flacWriter->writeFromAudioSampleBuffer(*buff, 0, buff->getNumSamples());
 
-
-              
-//              FileInputStream* fis = new FileInputStream(file);
-//              AudioFormatReader* flacReader = flacFormat.createReaderFor(fis, false);
-//
-//              /*
-//              delete
-//               */
-//              std::cout << flacReader << std::endl;
-//              /* end of delete*/
-              
-            
             
             
             std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
@@ -251,6 +244,24 @@ void MainComponent::stopButtonClicked()
 }
 void MainComponent::flacButtonClicked()
 {
-    
+    if(convertToFlac){
+        flacButton.setEnabled(false);
+        flacButton.setButtonText("Play flac format");
+        flacButton.setEnabled(true);
+        convertToFlac = false;
+    }
+    else{
+        //play flac from memory
+        //              FileInputStream* fis = new FileInputStream(file);
+        //              AudioFormatReader* flacReader = flacFormat.createReaderFor(fis, false);
+        //
+        //              /*
+        //              delete
+        //               */
+        //              std::cout << flacReader << std::endl;
+        //              /* end of delete*/
+                      
+                    
+    }
     
 }
