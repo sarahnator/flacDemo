@@ -59,9 +59,11 @@ private:
     TextButton flacButton;
 
     AudioFormatManager formatManager;
+    FlacAudioFormat flac;
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     AudioTransportSource transportSource;
     TransportState state;
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

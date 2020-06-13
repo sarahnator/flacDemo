@@ -7,6 +7,8 @@
 */
 
 #include "MainComponent.h"
+#include <iostream>
+#include <fstream>
 
 //==============================================================================
 MainComponent::MainComponent() : state(Stopped)
@@ -188,7 +190,23 @@ void MainComponent::openButtonClicked()
     {
         auto file = chooser.getResult();
         auto* reader = formatManager.createReaderFor (file);
-
+        
+        /*
+         
+         I HOPE THIS WORKS
+         
+         
+         */
+        FileInputStream* fis = new FileInputStream(file);
+        AudioFormatReader* flacReader = flac.createReaderFor(fis, false);
+        
+        /*
+        delete
+         */
+        std::cout << flacReader << std::endl;
+        /* end of delete*/
+        
+        
         if (reader != nullptr)
         {
             std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
