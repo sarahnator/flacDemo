@@ -13,6 +13,8 @@ MainComponent::MainComponent() : state(Stopped)
 {
     // Make sure you set the size of the component after
     // you add any child components.
+    
+    
     addAndMakeVisible (&openButton);
     openButton.setButtonText ("Open...");
     openButton.onClick = [this] { openButtonClicked(); };
@@ -28,6 +30,14 @@ MainComponent::MainComponent() : state(Stopped)
     stopButton.onClick = [this] { stopButtonClicked(); };
     stopButton.setColour (TextButton::buttonColourId, Colours::red);
     stopButton.setEnabled (false);
+    
+    addAndMakeVisible (&flacButton);
+    flacButton.setButtonText ("Convert to Flac format and play");
+    flacButton.onClick = [this] { flacButtonClicked(); };
+    flacButton.setColour (TextButton::buttonColourId, Colours::mediumpurple);
+    flacButton.setEnabled (false);
+
+    
     setSize (800, 600);
     
     formatManager.registerBasicFormats();
@@ -106,9 +116,10 @@ void MainComponent::paint (Graphics& g)
 
 void MainComponent::resized()
 {
-    openButton.setBounds (10, 10, getWidth() - 20, 20);
-    playButton.setBounds (10, 40, getWidth() - 20, 20);
-    stopButton.setBounds (10, 70, getWidth() - 20, 20);
+    openButton.setBounds (10, 10, getWidth() - 20, 30);
+    playButton.setBounds (10, 50, getWidth() - 20, 30);
+    stopButton.setBounds (10, 90, getWidth() - 20, 30);
+    flacButton.setBounds (10, 130, getWidth() - 20, 30);
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
@@ -202,4 +213,9 @@ void MainComponent::stopButtonClicked()
         changeState (Stopped);
     else
         changeState (Stopping);
+}
+void MainComponent::flacButtonClicked()
+{
+    
+    
 }

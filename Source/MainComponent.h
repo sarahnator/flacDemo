@@ -51,9 +51,12 @@ private:
     void changeState (TransportState newState);
     void playButtonClicked();
     void stopButtonClicked();
+    void flacButtonClicked();
+
     TextButton openButton;
     TextButton playButton;
     TextButton stopButton;
+    TextButton flacButton;
 
     AudioFormatManager formatManager;
     std::unique_ptr<AudioFormatReaderSource> readerSource;
