@@ -14,16 +14,16 @@ MainComponent::MainComponent() : state(Stopped)
     // Make sure you set the size of the component after
     // you add any child components.
     addAndMakeVisible (&openButton);
-          openButton.setButtonText ("Open...");
-          openButton.onClick = [this] { openButtonClicked(); };
+    openButton.setButtonText ("Open...");
+    openButton.onClick = [this] { openButtonClicked(); };
 
-          addAndMakeVisible (&playButton);
-          playButton.setButtonText ("Play");
-          playButton.onClick = [this] { playButtonClicked(); };
-          playButton.setColour (TextButton::buttonColourId, Colours::green);
-          playButton.setEnabled (false);
+    addAndMakeVisible (&playButton);
+    playButton.setButtonText ("Play");
+    playButton.onClick = [this] { playButtonClicked(); };
+    playButton.setColour (TextButton::buttonColourId, Colours::green);
+    playButton.setEnabled (false);
 
-        addAndMakeVisible (&stopButton);
+    addAndMakeVisible (&stopButton);
     stopButton.setButtonText ("Stop");
     stopButton.onClick = [this] { stopButtonClicked(); };
     stopButton.setColour (TextButton::buttonColourId, Colours::red);
