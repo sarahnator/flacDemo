@@ -47,6 +47,7 @@ private:
        };
     
     void openButtonClicked();
+    void convertToFlac(AudioFormatReader* reader);
 
     void changeState (TransportState newState);
     void playButtonClicked();
