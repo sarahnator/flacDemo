@@ -206,16 +206,34 @@ void MainComponent::openButtonClicked()
             reader->read(buff, 0, (int)reader->lengthInSamples, 0, true, true);
             
             
-            // write flac to memory
-            mem = new MemoryOutputStream((int)reader->lengthInSamples);
             flacFormat = new FlacAudioFormat();
-            AudioFormatWriter* flacWriter = flacFormat->createWriterFor(mem, reader->sampleRate, reader->numChannels, 16, NULL, 0); // 16 bits per sample (bit depth)
+            AudioFormatWriter* flacWriter;
+            // write flac to file
+           
+            File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
+            myfile.create();
+            
+            OutputStream* output = myfile.createOutputStream();
+            
+            bool r = myfile.create().wasOk();
+            std::cout<< "was file ok?: " << r << std::endl;
+
+
+//            File newFile(File::getCurrentWorkingDirectory().getChildFile("flacFile.flac"));
+         
+                flacWriter = flacFormat->createWriterFor(output, reader->sampleRate, reader->numChannels, 16, {}, 0);
+            output->flush();
+            delete flacWriter;
+
+        
+//            // write flac to memory
+            mem = new MemoryOutputStream((int)reader->lengthInSamples);
+            flacWriter = flacFormat->createWriterFor(mem, reader->sampleRate, reader->numChannels, 16, NULL, 0); // 16 bits per sample (bit depth)
             bool success = flacWriter->writeFromAudioSampleBuffer(*buff, 0, (int)reader->lengthInSamples);
             
             delete flacWriter;
             delete flacFormat;
             delete buff;
-            
             /* End of flac conversion
              */
 
