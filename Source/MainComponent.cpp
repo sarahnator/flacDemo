@@ -224,6 +224,7 @@ void MainComponent::convertToFlac(AudioFormatReader* reader)
         
         // write flac to file
         File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
+      
         myfile.setExecutePermission(true);
         myfile.create();  // I can't see that there is any file created
         std::cout<<"created: " << myfile.getCreationTime().getMonthName(false)<< " " << myfile.getCreationTime().getDayOfMonth() <<std::endl;
@@ -268,12 +269,12 @@ void MainComponent::stopButtonClicked()
 }
 void MainComponent::flacButtonClicked()
 {
-    //Does nothing for now
+    //Does nothing for now, but will convert flac->wav and play flac file
 
     flacButton.setEnabled (false);
-    flacButton.setEnabled (true);
 
     //TODO: figure out how to read from flac
+    //this stuff down here is just bs
 //    MemoryInputStream* fromMem = new MemoryInputStream(mem->getData(), mem->getDataSize(), false);
 //            play flac from memory
 //                   
