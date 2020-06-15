@@ -59,7 +59,8 @@ private:
     TextButton flacButton;
 
     AudioFormatManager formatManager;
-    FlacAudioFormat flacFormat;
+    FlacAudioFormat* flacFormat;
+    MemoryOutputStream* mem;    //store flac audio file
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     AudioTransportSource transportSource;
     TransportState state;
