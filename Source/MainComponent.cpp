@@ -15,8 +15,6 @@ MainComponent::MainComponent() : state(Stopped)
 {
     // Make sure you set the size of the component after
     // you add any child components.
-    
-    
     addAndMakeVisible (&openButton);
     openButton.setButtonText ("Open...");
     openButton.onClick = [this] { openButtonClicked(); };
@@ -195,27 +193,31 @@ void MainComponent::openButtonClicked()
         
         if (reader != nullptr)
         {
-//            create new audio buffer to transform wav to flac format
-              AudioSampleBuffer *buff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
-            //this should read the audio file
-//            AudioSampleBuffer* buff = new AudioSampleBuffer();
-//            buff->setSize(reader->numChannels, (int)reader->lengthInSamples);
+            
+            /* convert wav to flac
+            */
+                    
+            //Read wav file
+            AudioSampleBuffer *buff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
+            /* Alternatively:
+                        AudioSampleBuffer* buff = new AudioSampleBuffer();
+                        buff->setSize(reader->numChannels, (int)reader->lengthInSamples);
+            */
             reader->read(buff, 0, (int)reader->lengthInSamples, 0, true, true);
             
-              mem = new MemoryOutputStream( (int)reader->lengthInSamples);
             
+            // write flac to memory
+            mem = new MemoryOutputStream((int)reader->lengthInSamples);
             flacFormat = new FlacAudioFormat();
-            
-            
-            // 16 bits per sample (bit depth)
-            AudioFormatWriter* flacWriter = flacFormat->createWriterFor(mem, reader->sampleRate, reader->numChannels, 16, NULL, 0);
-                        
+            AudioFormatWriter* flacWriter = flacFormat->createWriterFor(mem, reader->sampleRate, reader->numChannels, 16, NULL, 0); // 16 bits per sample (bit depth)
             bool success = flacWriter->writeFromAudioSampleBuffer(*buff, 0, (int)reader->lengthInSamples);
             
-
             delete flacWriter;
             delete flacFormat;
             delete buff;
+            
+            /* End of flac conversion
+             */
 
             std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
             transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
