@@ -11,7 +11,7 @@
 #include <fstream>
 
 //==============================================================================
-MainComponent::MainComponent() : state(Stopped), convertToFlac(true)
+MainComponent::MainComponent() : state(Stopped)
 {
     // Make sure you set the size of the component after
     // you add any child components.
@@ -34,14 +34,14 @@ MainComponent::MainComponent() : state(Stopped), convertToFlac(true)
     stopButton.setEnabled (false);
     
     addAndMakeVisible (&flacButton);
-    flacButton.setButtonText ("Convert to Flac");
+    flacButton.setButtonText ("Play flac format");
     flacButton.onClick = [this] { flacButtonClicked(); };
     flacButton.setColour (TextButton::buttonColourId, Colours::lightblue);
     flacButton.setEnabled (false);
 
     
     setSize (800, 600);
-    
+
     formatManager.registerBasicFormats();
     transportSource.addChangeListener (this);
 
@@ -61,6 +61,7 @@ MainComponent::MainComponent() : state(Stopped), convertToFlac(true)
 
 MainComponent::~MainComponent()
 {
+//    delete flacFormat;
     // This shuts down the audio device and clears the audio source.
     shutdownAudio();
 }
@@ -195,26 +196,37 @@ void MainComponent::openButtonClicked()
         
         if (reader != nullptr)
         {
-            
 //            create new audio buffer to transform wav to flac format
-              AudioSampleBuffer *buff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
-              reader->read(buff, 0, (int)reader->lengthInSamples, 0, true, true);
+//              AudioSampleBuffer *buff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
+            //this should read the audio file
+            AudioSampleBuffer* buff = new AudioSampleBuffer();
+            buff->setSize(reader->numChannels, (int)reader->lengthInSamples);
+            reader->read(buff, 0, (int)reader->lengthInSamples, 0, true, true);
 
-              
               //create memory buffer for output stream
-              AudioSampleBuffer *destBuff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
-              MemoryOutputStream *mem = new MemoryOutputStream(destBuff, (int)reader->lengthInSamples);
-             
-//              //what bits per sample to use?
-              AudioFormatWriter* flacWriter = flacFormat.createWriterFor(mem, reader->sampleRate, reader->numChannels, reader->bitsPerSample, reader->metadataValues, 0);
+//              AudioSampleBuffer *destBuff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
             
-            //TODO: figure out why audioFormatWriter is null
-//              flacWriter->writeFromAudioSampleBuffer(*buff, 0, buff->getNumSamples());
-            delete mem;
-            delete destBuff;
+              MemoryOutputStream* mem = new MemoryOutputStream( (int)reader->lengthInSamples);
+            
+            AudioFormat* flacFormat = new FlacAudioFormat();
+            
+            
+            //16 bits per sample
+            AudioFormatWriter* flacWriter = flacFormat->createWriterFor(mem, reader->sampleRate, reader->numChannels, 16, NULL, 0);
+                        
+            bool success = flacWriter->writeFromAudioSampleBuffer(*buff, 0, (int)reader->lengthInSamples);
+            
+             //what bits per sample to use?
+//            AudioFormatWriter* flacWriter = flacFormat.createWriterFor(mem, reader->sampleRate, reader->numChannels, flacFormat.getPossibleBitDepths()[0], {}, 0);
+//
+////            if(flacWriter){
+////            //TODO: figure out why this crashes
+//                flacWriter->writeFromAudioSampleBuffer(*buff, 0, buff->getNumSamples());
+////            }
+            delete flacWriter;
+            delete flacFormat;
+//            delete mem;
             delete buff;
-
-              
 
             
             
@@ -244,14 +256,7 @@ void MainComponent::stopButtonClicked()
 }
 void MainComponent::flacButtonClicked()
 {
-    if(convertToFlac){
-        flacButton.setEnabled(false);
-        flacButton.setButtonText("Play flac format");
-        flacButton.setEnabled(true);
-        convertToFlac = false;
-    }
-    else{
-        //play flac from memory
+            //play flac from memory
         //              FileInputStream* fis = new FileInputStream(file);
         //              AudioFormatReader* flacReader = flacFormat.createReaderFor(fis, false);
         //
@@ -262,6 +267,6 @@ void MainComponent::flacButtonClicked()
         //              /* end of delete*/
                       
                     
-    }
+    
     
 }
