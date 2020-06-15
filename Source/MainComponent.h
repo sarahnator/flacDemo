@@ -64,7 +64,11 @@ private:
     FlacAudioFormat flacFormat;
     MemoryOutputStream* mem;    //store flac audio file
     std::unique_ptr<AudioFormatReaderSource> readerSource;
+    std::unique_ptr<AudioFormatReaderSource> flacSource;
+
     AudioTransportSource transportSource;
+    AudioTransportSource transportSourceFlac;
+
     TransportState state;
     
 

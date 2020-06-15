@@ -149,6 +149,7 @@ void MainComponent::changeState (TransportState newState)
                 playButton.setButtonText ("Play");
                 stopButton.setButtonText ("Stop");
                 stopButton.setEnabled (false);
+                flacButton.setEnabled(true);
                 transportSource.setPosition (0.0);
                 break;
 
@@ -160,10 +161,12 @@ void MainComponent::changeState (TransportState newState)
                 playButton.setButtonText ("Pause");
                 stopButton.setButtonText ("Stop");
                 stopButton.setEnabled (true);
+                flacButton.setEnabled(false);
                 break;
 
             case Pausing:
                 transportSource.stop();
+                flacButton.setEnabled(true);
                 break;
 
             case Paused:
@@ -172,6 +175,7 @@ void MainComponent::changeState (TransportState newState)
                 break;
 
             case Stopping:
+                flacButton.setEnabled(true);
                 transportSource.stop();
                 break;
         }
@@ -199,18 +203,13 @@ void MainComponent::openButtonClicked()
             std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
             transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
             playButton.setEnabled (true);
+            playButton.setButtonText("Play");
             flacButton.setEnabled (true);
             readerSource.reset (newSource.release());
         }
     }
 }
 
-/*  convert flac to wav
- *
-*/
-void MainComponent::decodeFlac(){
-    
-}
 
 
 /*  convert wav to flac
@@ -271,15 +270,26 @@ void MainComponent::stopButtonClicked()
 }
 void MainComponent::flacButtonClicked()
 {
-    //Does nothing for now, but will  play flac file
     flacButton.setEnabled (false);
-//    File myfile(File::getCurrentWorkingDirectory().getChildFile("chan1.flac"));
-     File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
-    auto* reader = formatManager.createReaderFor (myfile);
-    std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
-              transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
+    decodeFlac();
     playButton.setButtonText("Play flac");
-    
-    readerSource.reset (newSource.release());
+
+
+}
+/*  convert flac to wav from current
+ *
+*/
+void MainComponent::decodeFlac(){
+//        File myfile(File::getCurrentWorkingDirectory().getChildFile("chan1.flac"));
+     File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
+    //TODO: create more enum states
+//    auto* reader = formatManager.createReaderFor (myfile);
+//    std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
+//              transportSourceFlac.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
+//    flacSource.reset (newSource.release());
+    auto* reader = formatManager.createReaderFor (myfile);
+       std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
+                 transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
+       readerSource.reset (newSource.release());
 
 }
