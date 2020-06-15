@@ -208,8 +208,6 @@ void MainComponent::openButtonClicked()
 */
 void MainComponent::convertToFlac(AudioFormatReader* reader)
 {
-        
-                        
         //Read wav file
         AudioSampleBuffer *buff = new AudioSampleBuffer(reader->numChannels, (int)reader->lengthInSamples);
         /* Alternatively:
@@ -223,21 +221,20 @@ void MainComponent::convertToFlac(AudioFormatReader* reader)
         AudioFormatWriter* flacWriter;
         
         // write flac to file
-        File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
-      
-        myfile.setExecutePermission(true);
-        myfile.create();  // I can't see that there is any file created
+    File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
+
         std::cout<<"created: " << myfile.getCreationTime().getMonthName(false)<< " " << myfile.getCreationTime().getDayOfMonth() <<std::endl;
-        // but this verifies that the file was indeed created
-        
+       
         OutputStream* output = myfile.createOutputStream();
         
         bool r = myfile.create().wasOk();
         std::cout<< "was file ok?: " << r << std::endl;
-        // ok here
+    
      
-            flacWriter = flacFormat->createWriterFor(output, reader->sampleRate, reader->numChannels, 16, {}, 0);
+        flacWriter = flacFormat->createWriterFor(output, reader->sampleRate, reader->numChannels, 16, {}, 0);
+        flacWriter->writeFromAudioReader(*reader, 0, reader->lengthInSamples);
         output->flush();
+        flacWriter->flush();
         delete flacWriter;
 
         // write flac format to memory
@@ -270,9 +267,20 @@ void MainComponent::stopButtonClicked()
 void MainComponent::flacButtonClicked()
 {
     //Does nothing for now, but will convert flac->wav and play flac file
-
-    flacButton.setEnabled (false);
-
+//    flacButton.setEnabled (false);
+//    File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
+//    auto* reader = formatManager.createReaderFor (myfile);
+//    std::unique_ptr<AudioFormatReaderSource> newSource (new AudioFormatReaderSource (reader, true));
+//              transportSource.setSource (newSource.get(), 0, nullptr, reader->sampleRate);
+//
+//    readerSource.reset (newSource.release());
+//
+//
+//
+    
+    
+    
+    
     //TODO: figure out how to read from flac
     //this stuff down here is just bs
 //    MemoryInputStream* fromMem = new MemoryInputStream(mem->getData(), mem->getDataSize(), false);
