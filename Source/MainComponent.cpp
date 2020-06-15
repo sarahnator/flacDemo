@@ -211,7 +211,10 @@ void MainComponent::openButtonClicked()
             // write flac to file
            
             File myfile(File::getCurrentWorkingDirectory().getChildFile("converted.flac"));
+            myfile.setExecutePermission(true);
             myfile.create();
+            std::cout<<"created: " << myfile.getCreationTime().getMonthName(false)<< " " << myfile.getCreationTime().getDayOfMonth() <<std::endl;
+            
             
             OutputStream* output = myfile.createOutputStream();
             
@@ -230,7 +233,8 @@ void MainComponent::openButtonClicked()
             mem = new MemoryOutputStream((int)reader->lengthInSamples);
             flacWriter = flacFormat->createWriterFor(mem, reader->sampleRate, reader->numChannels, 16, NULL, 0); // 16 bits per sample (bit depth)
             bool success = flacWriter->writeFromAudioSampleBuffer(*buff, 0, (int)reader->lengthInSamples);
-            
+//            output->write(mem->getData(), mem->getDataSize());
+//            output->flush();
             delete flacWriter;
             delete flacFormat;
             delete buff;
